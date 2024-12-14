@@ -8,6 +8,9 @@ from tqdm import tqdm
 import numpy as np
 
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+
 def get_seq_mapping():
     """convert mutation type to integer (index)"""
     #TODO add support for indel and make it more convenient to modify this function
@@ -309,7 +312,7 @@ class MyCollator:
             neg_mask[i].extend([0] * pad_num)
             neg_b_features[i].extend([[0] * self.num_fb] * pad_num)
 
-        return {'pos_a': torch.LongTensor(pos_a_features).cuda(), 
-                'pos_b': torch.LongTensor(pos_b_features).cuda(), 
-                'neg_b': torch.LongTensor(neg_b_features).cuda(),
-                'neg_mask': torch.FloatTensor(neg_mask).cuda()}
+        return {'pos_a': torch.LongTensor(pos_a_features).to(device),
+                'pos_b': torch.LongTensor(pos_b_features).to(device),
+                'neg_b': torch.LongTensor(neg_b_features).to(device),
+                'neg_mask': torch.FloatTensor(neg_mask).to(device)}

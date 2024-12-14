@@ -8,6 +8,7 @@ from tqdm import tqdm
 import json
 import numpy as np
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 def save_settings():
     '''
@@ -65,7 +66,7 @@ if __name__ == "__main__":
                             collate_fn=mycollator)
     # training process
     model = MutSpace(config=config, n_features=dataset.feature_num)
-    model = model.cuda()
+    model = model.to(device)
     config.verbose_step = len(dataloader) // 2
     range_loss = range_ps = range_ns = 0
     for epc in range(config.epochs):
